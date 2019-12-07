@@ -3,6 +3,15 @@ import ReactDOM from 'react-dom';
 
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import createStore from './store/index'
+import reducer from './store/reducer'
+
+
+const store = createStore(reducer, {message:[]})
+
+export const thisContext = React.createContext(store)
+export const Provider = thisContext.Provider
+export const Consumer = thisContext.Consumer
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
