@@ -1,28 +1,34 @@
 import React,{useEffect, useState, useContext} from 'react';
 import io from 'socket.io-client'
 import {thisContext} from './index'
-
+import MessageLog from './components/MessageLog'
 
 function App() {
   const context = useContext(thisContext)
   const [socket, setSocket] = useState(io.connect('http://localhost:9080'))
   const [chat, setChat] = useState("")
   const [name, setName] = useState("")
-  const [data, setData] = useState([])
+  
   useEffect(()=>{
-    socket.on('chat-msg', (obj)=>{
-      obj.key = "key" + (data.length+1)
-      setData([...data, obj])
+    
+    socket.on('chat-msg', (obj)=>{      
+      context.dispatch({
+        type : "ADD_MESSAGE",
+        data : obj
+      })
+      setChat("")
     })
-    console.log(context.getState())
-  },[data])
+
+  },[])
   const sendMessage = (e)=>{
     e.preventDefault();
     socket.emit("chat-msg",  {
       name: name,
       message: chat
     })
-    setChat("")
+    
+    setChat(" ")
+    
   }
   const changeChat = (e)=>{
     setChat(e.target.value)
@@ -31,17 +37,10 @@ function App() {
     setName(e.target.value)
   }
   return (
-    <div className="App">
+    
+      <div className="App">
             <h1>김서버의 채팅방 tjjjjtt</h1>
-            <div>
-              {data.map((el)=>{
-                return(
-                  <div>
-                    <p>{el.name} : {el.message}</p>
-                  </div>
-                )
-              })}
-            </div>
+            <MessageLog />
             <form onSubmit = {sendMessage}>
               <div>
                 <div>
@@ -53,7 +52,8 @@ function App() {
                 <button>전송</button>
               </div>
             </form>
-          </div>
+      </div>
+    
   );
 }
 
