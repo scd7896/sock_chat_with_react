@@ -1,9 +1,14 @@
-import React,{useContext} from 'react'
+import React,{useContext, useCallback} from 'react'
 import {thisContext} from '../index'
+
 const MessageLog = ()=>{
     const context = useContext(thisContext)
-    return(
-        <div>
+
+    
+    const useMessage = useCallback(()=>{
+      
+        return (
+          <div>
               {context.getState().message.map((el, i)=>{
                 return(
                   <div key = {i}>
@@ -11,7 +16,10 @@ const MessageLog = ()=>{
                   </div>
                 )
               })}
-        </div>
+          </div>)
+    },[context.getState().message])
+    return(
+        useMessage()
     )
 }
 

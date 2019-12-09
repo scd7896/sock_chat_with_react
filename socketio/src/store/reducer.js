@@ -10,6 +10,12 @@ export default function reducer(state = {}, action) {
                 ...state,
                 message : []
             }
+        case 'CNT_UP' :
+            
+            return {
+                ...state,
+                cnt : state.cnt+1
+            }
         default:
             return state;
     }

@@ -7,13 +7,17 @@ import createStore from './store/index'
 import reducer from './store/reducer'
 
 
-const store = createStore(reducer, {message:[]})
+const store = createStore(reducer, {message:[], cnt : 0})
 
 export const thisContext = React.createContext(store)
 export const Provider = thisContext.Provider
 export const Consumer = thisContext.Consumer
 
-ReactDOM.render(<App></App>, document.getElementById('root'));
+const render = ()=>{
+    ReactDOM.render(<App></App>, document.getElementById('root'));
+}
+store.subscribe(()=> render())
+render()
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.

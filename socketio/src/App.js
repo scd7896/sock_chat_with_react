@@ -1,4 +1,4 @@
-import React,{useEffect, useState, useContext} from 'react';
+import React,{useState, useContext, useEffect} from 'react';
 import io from 'socket.io-client'
 import {thisContext} from './index'
 import MessageLog from './components/MessageLog'
@@ -10,15 +10,15 @@ function App() {
   const [name, setName] = useState("")
   
   useEffect(()=>{
-    
     socket.on('chat-msg', (obj)=>{      
+      
       context.dispatch({
         type : "ADD_MESSAGE",
         data : obj
       })
+      
       setChat("")
     })
-
   },[])
   const sendMessage = (e)=>{
     e.preventDefault();
@@ -27,7 +27,7 @@ function App() {
       message: chat
     })
     
-    setChat(" ")
+    
     
   }
   const changeChat = (e)=>{
@@ -36,8 +36,17 @@ function App() {
   const changeName = (e)=>{
     setName(e.target.value)
   }
+  const resetMessage =()=>{
+    context.dispatch({
+      type : "RESET_MESSAGE"
+    })
+  }
+  const clickToButton = ()=>{
+    context.dispatch({
+      type : "CNT_UP"
+    })
+  }
   return (
-    
       <div className="App">
             <h1>김서버의 채팅방 tjjjjtt</h1>
             <MessageLog />
@@ -52,8 +61,10 @@ function App() {
                 <button>전송</button>
               </div>
             </form>
+            <button onClick = {resetMessage}>대화내용 초기화</button>
+            <div>{context.getState().cnt}</div>
+            <button onClick = {clickToButton}>upbutton</button>
       </div>
-    
   );
 }
 
